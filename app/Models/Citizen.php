@@ -10,11 +10,21 @@ class Citizen extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id', 'first_name', 'middle_name', 'lastname', 'country', 'state', 'city', 'pincode', 'address', 'gender', 'aadhar_card', 'mobile_number', 'alternative_number', 'email'
+        'id', 'first_name',  'lastname', 'country', 'state', 'city', 'pincode',  'gender', 'aadhar_card', 'mobile_number', 'email', 'created_by', 'updated_by'
     ];
 
     protected $casts = [
         'id' => "string",
         'first_name' => "string"
     ];
+
+    public function migrateDataOne()
+    {
+        return $this->hasOne(MigrateList::class);
+    }
+
+    public function migrateDataMany()
+    {
+        return $this->hasMany(MigrateList::class);
+    }
 }

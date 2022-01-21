@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Citizen;
+use App\Models\UserLogin;
+use App\Models\MigrateList;
 use App\Http\Requests\CitizenRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\CitizenResource;
-use Config;
+use Illuminate\Support\Facades\Hash;
 
 class CitizenController extends Controller
 {
@@ -17,7 +19,7 @@ class CitizenController extends Controller
      */
     public function index()
     {
-        return "hello";
+        return  Citizen::all();
     }
 
     /**
@@ -39,8 +41,17 @@ class CitizenController extends Controller
     public function store(CitizenRequest $request)
     {
 
-        new CitizenResource(Citizen::create($request->all([])));
 
+        $citizen = new CitizenResource(Citizen::create($request->all([])));
+        $lastId = $citizen->id;
+
+        if (isset($lastId)) {
+            $userLogin = new UserLogin;
+            $userLogin->email = $request->email;
+            $userLogin->password = Hash::make($request->password);
+            $userLogin->user_id = $lastId;
+            $userLogin->save();
+        }
         return response()->json(['success' => config('constants.success')]);
     }
 
@@ -75,9 +86,19 @@ class CitizenController extends Controller
      */
     public function update(CitizenRequest $request, Citizen $citizen)
     {
-
+        $migrateStateId = $request->migrate_state_id;
 
         $citizen->update($request->all());
+
+
+        if (isset($migrateStateId)) {
+
+            $migrateList = new MigrateList;
+            $migrateList->migrate_state_id = $request->migrate_state_id;
+            $migrateList->user_id = $citizen->id;
+            $migrateList->save();
+        }
+
         return new CitizenResource($citizen);
     }
 
@@ -90,5 +111,16 @@ class CitizenController extends Controller
     public function destroy(Citizen $citizen)
     {
         //
+    }
+
+    public function oneToOne()
+    {
+
+        return Citizen::find(2)->migrateDataOne;
+    }
+    public function migrateDataMany()
+    {
+
+        return Citizen::find(2)->migrateData;
     }
 }
