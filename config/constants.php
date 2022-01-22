@@ -4,6 +4,7 @@ use Carbon\Carbon;
 
 return [
 
+    'update' => 'Successfully Update',
     'success' => 'Successfully Added Citizen',
     'success_admin' => 'Successfully Added Admin',
     'success_admin_update' => 'Successfully Update Admin',

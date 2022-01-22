@@ -38,7 +38,7 @@ Route::group(['prefix' => 'v1',], function () {
     /* End Administrator */
 
     /* Start Login */
-    Route::post('check-login', 'Login@checkLogin');
+
     /* End Login */
 
     /* Start Migrate */
@@ -46,11 +46,18 @@ Route::group(['prefix' => 'v1',], function () {
     Route::get('migrate-list-approved', 'Migrate@migrateListApproved');
     Route::get('migrate-list-disapproved', 'Migrate@migrateListDisapproved');
     Route::get('migrate-list-by-id/{migrate}', 'Migrate@migrateListById');
-    Route::get('approved-migrate', 'Migrate@approvedMigrate');
+    Route::post('approved-migrate', 'Migrate@approvedMigrate');
     /* End Migrate */
 
     Route::get('one-to-one', 'CitizenController@oneToOne');
     Route::get('one-to-many', 'CitizenController@oneToMany');
+    Route::post('check-login', 'Login@checkLogin');
+
+    /*     Route::group([
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::post('check-login', 'Login@checkLogin');
+    }); */
 });
 
 //Route::get('test', 'TestController@index');

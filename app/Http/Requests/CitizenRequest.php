@@ -30,7 +30,7 @@ class CitizenRequest extends FormRequest
             'state' => 'required|max:50',
             'aadhar_card' => 'required', 'integer', 'digits:12', 'regex:/^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/i',
             'mobile_number' => 'required|integer|digits:10|starts_with:9,8,7,6',
-            'email' => 'required|max:255|unique:Citizens,email,NULL,id',
+            //'email' => 'required|max:255|unique:Citizens,email,NULL,id',
             'password' => 'required|max:50',
         ];
     }

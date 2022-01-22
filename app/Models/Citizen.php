@@ -27,4 +27,11 @@ class Citizen extends Model
     {
         return $this->hasMany(MigrateList::class);
     }
+    public static function GetMessage($resource, $message)
+    {
+        return response()->json([
+            'message' => $message,
+            'data'    => $resource,
+        ]);
+    }
 }

@@ -99,7 +99,9 @@ class CitizenController extends Controller
             $migrateList->save();
         }
 
-        return new CitizenResource($citizen);
+
+        //return new CitizenResource($citizen);
+        return Citizen::GetMessage($citizen, config('constants.update'));
     }
 
     /**
@@ -115,12 +117,11 @@ class CitizenController extends Controller
 
     public function oneToOne()
     {
-
         return Citizen::find(2)->migrateDataOne;
     }
-    public function migrateDataMany()
-    {
 
-        return Citizen::find(2)->migrateData;
+    public function oneToMany()
+    {
+        return Citizen::find(2)->migrateDataMany;
     }
 }

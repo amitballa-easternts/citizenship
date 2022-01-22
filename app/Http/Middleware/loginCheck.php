@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class loginCheck
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $checkLogin = "checkLogin";
+        $actionName = class_basename($request->route()->getActionname());
+        $actionName = explode("@", $actionName);
+        $actionName[1];
+
+        $userTokens = $user->tokens;
+        foreach ($userTokens as $token) {
+            $token->revoke();
+        }
+
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+        return $token;
+        /* if ($checkLogin == $actionName[1]) {
+            return $next($request);
+        } else {
+            return response()->json(['error' => "Authorization Error"]);
+        } */
+    }
+}

@@ -13,12 +13,13 @@ class Login extends Controller
 
     public function checkLogin(Request $request)
     {
-        $logged = $request->validate([
+
+        /*   $logged = $request->validate([
             'email' => 'required',
             'password' => 'required'
-        ]);
-        $login = UserLogin::where('email', $request->email)->first();
-        $login->sendEmailVerificationNotification();
+        ]); */
+        /*    $login = UserLogin::where('email', $request->email)->first();
+        $login->sendEmailVerificationNotification(); */
         /*  try {
             $user->$user->createToken('Auth Token')->accessToken;
         } catch (\Exception $e) {
@@ -31,13 +32,14 @@ class Login extends Controller
         }
         $accessToken = $logged->createToken('authToken')->accessToken;
         return response(['user_logins' => Auth::user(), 'access_token' => $accessToken]); */
-        /* $login = UserLogin::where('email', $request->email)->first();
 
-        $tokenResult = $request->email->createToken('Personal Access Token');
-        $token = $tokenResult->token;
 
-        return $token; */
-        /*         if (!$login) {
+
+        $login = UserLogin::where('email', $request->email)->first();
+
+        /*       $accessToken = $login->createToken('authToken')->accessToken;
+        return response(['user_logins' => Auth::user(), 'access_token' => $accessToken]); */
+        if (!$login) {
             return response()->json(['error' => config('constants.login.invalid_user')]);
         } else {
             if (Hash::check($request->password, $login->password)) {
@@ -45,6 +47,6 @@ class Login extends Controller
             } else {
                 return response()->json(['error' => config('constants.login.password_not_match')]);
             }
-        } */
+        }
     }
 }
