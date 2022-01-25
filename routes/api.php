@@ -28,6 +28,8 @@ Route::group(['prefix' => 'v1',], function () {
 
     Route::post('citizen/{citizen}', 'CitizenController@update');
     Route::get('citizen', 'CitizenController@index');
+    Route::post('delete-citizen', 'CitizenController@deleteCitizen');
+
     /* End Citizen */
 
 

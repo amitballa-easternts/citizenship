@@ -35,4 +35,8 @@ class Citizen extends Model
             'data'    => $resource,
         ]);
     }
+    public function scopeDeleteCitizen($query, $request, $user_id)
+    {
+        return $user_id->delete();
+    }
 }

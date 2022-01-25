@@ -112,11 +112,25 @@ class CitizenController extends Controller
      * @param  \App\Models\Citizen  $citizen
      * @return \Illuminate\Http\Response
      */
-    public function update(CitizenRequest $request, Citizen $citizen)
+    public function update(Request $request, Citizen $citizen)
     {
-        $migrateStateId = $request->migrate_state_id;
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|max:50',
+            'lastname' => 'required|max:50',
+            'state' => 'required|max:50',
+            'aadhar_card' => 'required', 'integer', 'digits:12', 'regex:/^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/i',
+            'mobile_number' => 'required|integer|digits:10|starts_with:9,8,7,6',
+            'email' => 'required|max:255',
+            'password' => 'required|max:50',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 421);
+        } else {
+            $migrateStateId = $request->migrate_state_id;
 
-        $citizen->update($request->all());
+            $citizen->update($request->all());
+        }
+
 
 
 
@@ -145,5 +159,10 @@ class CitizenController extends Controller
     public function oneToMany()
     {
         return Citizen::find(2)->migrateDataMany;
+    }
+
+    public function deleteCitizen(Request $request, Citizen $citizen)
+    {
+        return $citizen;
     }
 }

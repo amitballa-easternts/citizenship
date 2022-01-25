@@ -88,17 +88,19 @@ class StateWiseList extends Controller
 
     public function stateWiseList(Request $request)
     {
-        //return $request->id;
+        //chekc User Is Valid
         $stateWiseList =  Citizen::Where('id',  $request->session_user_id)->first();
         if (!$stateWiseList) {
 
             return response()->json(['error' => config('constants.state_list.not_found_user')]);
         }
+        //Check User Is admin (Type  1 is admin)
         $loginCheck =  UserLogin::Where('user_id', $stateWiseList->id,)->Where('type', '1')->first();
         if (!$loginCheck) {
 
             return response()->json(['error' => config('constants.state_list.not_admin')]);
         }
+        //Check State
         $stateUser = Citizen::Where('state', $loginCheck->state)->get();
 
         return $stateUser;
