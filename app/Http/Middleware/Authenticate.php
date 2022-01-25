@@ -9,14 +9,14 @@ use Laravel\Passport\Passport;
 
 class Authenticate extends Middleware
 {
-    protected $guards = [];
+    // protected $guards = [];
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    public function handle($request, Closure $next, ...$guards)
+    /*   public function handle($request, Closure $next, ...$guards)
     {
         $this->guards = $guards;
 
@@ -33,12 +33,12 @@ class Authenticate extends Middleware
         } catch (Exception $e) {
             return \Illuminate\Support\Facades\Response::make("Authorization Token not found", 401);
         }
-    }
+    } */
     protected function redirectTo($request)
     {
         if (!$request->expectsJson()) {
-            //return route('login');
-            return '';
+            return route('login');
+            //return '';
         }
     }
 }

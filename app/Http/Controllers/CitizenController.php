@@ -9,6 +9,8 @@ use App\Http\Requests\CitizenRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\CitizenResource;
 use Illuminate\Support\Facades\Hash;
+use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CitizenController extends Controller
 {
@@ -38,11 +40,37 @@ class CitizenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CitizenRequest $request)
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|max:50',
+            'lastname' => 'required|max:50',
+            'state' => 'required|max:50',
+            'aadhar_card' => 'required', 'integer', 'digits:12', 'regex:/^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/i',
+            'mobile_number' => 'required|integer|digits:10|starts_with:9,8,7,6',
+            'email' => 'required|max:255|unique:Citizens,email,NULL,id',
+            'password' => 'required|max:50',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 421);
+        } else {
+            $citizen = new CitizenResource(Citizen::create($request->all([])));
+            $lastId = $citizen->id;
 
-        $citizen = new CitizenResource(Citizen::create($request->all([])));
+            if (isset($lastId)) {
+                $userLogin = new UserLogin;
+                $userLogin->email = $request->email;
+                $userLogin->password = Hash::make($request->password);
+                $userLogin->user_id = $lastId;
+                $userLogin->save();
+            }
+            $accessToken = $citizen->createToken('authToken')->accessToken;
+            response(['user_logins' => Auth::user(), 'access_token' => $accessToken]);
+            return response()->json(['success' => config('constants.success')]);
+        }
+
+        /*         $citizen = new CitizenResource(Citizen::create($request->all([])));
         $lastId = $citizen->id;
 
         if (isset($lastId)) {
@@ -52,7 +80,7 @@ class CitizenController extends Controller
             $userLogin->user_id = $lastId;
             $userLogin->save();
         }
-        return response()->json(['success' => config('constants.success')]);
+        return response()->json(['success' => config('constants.success')]); */
     }
 
     /**
@@ -91,13 +119,7 @@ class CitizenController extends Controller
         $citizen->update($request->all());
 
 
-        if (isset($migrateStateId)) {
 
-            $migrateList = new MigrateList;
-            $migrateList->migrate_state_id = $request->migrate_state_id;
-            $migrateList->user_id = $citizen->id;
-            $migrateList->save();
-        }
 
 
         //return new CitizenResource($citizen);

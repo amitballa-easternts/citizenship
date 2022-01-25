@@ -25,6 +25,7 @@ Route::group(['prefix' => 'v1',], function () {
     Route::resource('citizen', 'CitizenController', [
         'only' => ['show', 'store', 'update', 'destroy']
     ]);
+
     Route::post('citizen/{citizen}', 'CitizenController@update');
     Route::get('citizen', 'CitizenController@index');
     /* End Citizen */
@@ -34,7 +35,9 @@ Route::group(['prefix' => 'v1',], function () {
     /* Start Administrator */
     Route::post('add-admin', 'Administrator@addAdministrator');
     Route::get('get-admin', 'Administrator@getAdministrator');
-    Route::post('update-admin', 'Administrator@updateAdministrator');
+
+
+    //Route::post('update-admin', 'Administrator@updateAdministrator');
     /* End Administrator */
 
     /* Start Login */
@@ -51,13 +54,17 @@ Route::group(['prefix' => 'v1',], function () {
 
     Route::get('one-to-one', 'CitizenController@oneToOne');
     Route::get('one-to-many', 'CitizenController@oneToMany');
+
     Route::post('check-login', 'Login@checkLogin');
 
-    /*     Route::group([
-        'middleware' => 'auth:api'
-    ], function () {
-        Route::post('check-login', 'Login@checkLogin');
-    }); */
+    Route::post('logout', 'Login@logout');
+
+    Route::get('login', 'Login@login')->name('login');
+
+    Route::post('update-admin', 'Administrator@updateAdministrator');
+
+    Route::post('state-wise-list', 'StateWiseList@stateWiseList');
+    Route::post('user-migrate', 'StateWiseList@userMigrate');
 });
 
 //Route::get('test', 'TestController@index');

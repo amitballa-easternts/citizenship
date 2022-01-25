@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
 
 class Citizen extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $fillable = [
         'id', 'first_name',  'lastname', 'country', 'state', 'city', 'pincode',  'gender', 'aadhar_card', 'mobile_number', 'email', 'created_by', 'updated_by'
